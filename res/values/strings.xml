@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Common for App -->
+    <string name="app_name">SimpleTodoList</string>
+    <string name="title_activity_edit_item">EditItemActivity</string>
+    <string name="action_settings">Settings</string>
+    
+    
+    <!-- TodoActivity -->
+    <string name="hint_new_item">Enter new Item</string>
+    <string name="add">Add</string>
+    
+    <!-- EditItemActivity --> 
+    <string name="edit_text">Edit Item Below:</string>
+    <string name="save">Save</string>
+       
+</resources>
