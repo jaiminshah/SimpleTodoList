@@ -12,9 +12,11 @@ Extensions:
 Walkthrough for the feature:
 
 Original
+
 ![Video Walkthrough](simpletodolist.gif)
 
 With DialogFragment
+
 ![Video Walkthrough](simpletodolist_dialogfragment.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
