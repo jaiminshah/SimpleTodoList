@@ -1,3 +1,4 @@
+/*Not in Use. Kept for reference. */
 package com.codepath.apps.simpletodolist;
 
 import android.app.Activity;

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
 
+import com.codepath.apps.simpletodolist.EditItemDialog.EditItemDialogListener;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,14 +18,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 
-public class TodoActivity extends Activity {
+public class TodoActivity extends FragmentActivity implements EditItemDialogListener{
 	ArrayList<String> items;
 	ArrayAdapter<String> itemsAdapter;
 	ListView lvItems;
-	
-	//Request code for the EditItemActivity
-	private final int REQUEST_CODE = 10;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,16 +32,20 @@ public class TodoActivity extends Activity {
         setContentView(R.layout.activity_todo);
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<String>();
-        readItems();
+        
+        // Read from items from file
+        readItems(); 
         itemsAdapter = new ArrayAdapter<String>(this,
         		android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
         items.add("First Item");
         items.add("Second Item");
+        
         setupListViewListener();
     }
     
     private void setupListViewListener(){
+    	//Set Long click to remove an Item
     	lvItems.setOnItemLongClickListener(new OnItemLongClickListener() {
 		@Override
 		public boolean onItemLongClick(AdapterView<?> parent,
@@ -52,29 +57,20 @@ public class TodoActivity extends Activity {
 			}
     	});
     	
+    	//Set Click for editing an item by opening a dialog
     	lvItems.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Intent i = new Intent(TodoActivity.this, EditItemActivity.class);
-				i.putExtra("text", items.get(position));
-				i.putExtra("position", position);
-				startActivityForResult(i, REQUEST_CODE);
+				FragmentManager fm = getSupportFragmentManager();
+			  	EditItemDialog alertDialog = 
+			  			EditItemDialog.newInstance(position, items.get(position));
+			  	alertDialog.show(fm, "fragment_alert");
 			}			
     	}); 
     }
-    
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    	if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-    			String editedText = data.getExtras().getString("text");
-    			int position = data.getExtras().getInt("position");
-    			items.set(position, editedText);
-    			itemsAdapter.notifyDataSetChanged();
-    			saveItems();
-    	}
-    }
+
+    //Called when Add btn is pressed
     public void addTodoItem(View v){
     	EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
     	itemsAdapter.add(etNewItem.getText().toString());
@@ -103,5 +99,13 @@ public class TodoActivity extends Activity {
     		e.printStackTrace();
     	}
     }
+
+    //Callback from the edit dialog. 
+	@Override
+	public void onDialogPositiveClick(int position, String editedText) {
+		items.set(position, editedText);
+		itemsAdapter.notifyDataSetChanged();
+		saveItems();
+	}
 
 }

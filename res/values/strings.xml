@@ -14,5 +14,8 @@
     <!-- EditItemActivity --> 
     <string name="edit_text">Edit Item Below:</string>
     <string name="save">Save</string>
+    
+    <!-- EditItemDialog -->
+    <string name="edit_dialog">Edit Item</string>
        
 </resources>
