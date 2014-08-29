@@ -1,12 +1,12 @@
 package com.codepath.apps.simpletodolist;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
 import com.codepath.apps.simpletodolist.EditItemDialog.EditItemDialogListener;
+import com.codepath.apps.simpletodolist.database.MItem;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,14 +33,11 @@ public class TodoActivity extends FragmentActivity implements EditItemDialogList
         lvItems = (ListView) findViewById(R.id.lvItems);
         items = new ArrayList<String>();
         
-        // Read from items from file
+        // Read from items from DB
         readItems(); 
         itemsAdapter = new ArrayAdapter<String>(this,
         		android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
-        items.add("First Item");
-        items.add("Second Item");
-        
         setupListViewListener();
     }
     
@@ -77,26 +74,29 @@ public class TodoActivity extends FragmentActivity implements EditItemDialogList
     	etNewItem.setText("");
     	saveItems();
     }
-    
+        
     private void readItems() {
-    	File filesDir = getFilesDir();
-    	File todoFile = new File(filesDir, "todo.txt");
-    	try{
-    		items = new ArrayList<String>(FileUtils.readLines(todoFile));
-    	} catch(IOException e) {
-    		items = new ArrayList<String>();
-    		e.printStackTrace();
+    	List<MItem> itemList = MItem.getAll();
+    	for(MItem item : itemList){
+    		items.add(item.position, item.text);
     	}
     }
-
+    
     private void saveItems() {
-    	File filesDir = getFilesDir();
-    	File todoFile = new File(filesDir, "todo.txt");
-    	try{
-    		FileUtils.writeLines(todoFile, items);
-    	} catch(IOException e) {
-    		items = new ArrayList<String>();
-    		e.printStackTrace();
+    	//Use ActiveAndroid transaction for better performance.
+    	ActiveAndroid.beginTransaction();
+    	try {
+    		//Delete the whole table and add entries with the latest Values
+    		//TODO: figure out a better way.
+    		new Delete().from(MItem.class).execute();
+	        for (int i = 0; i < items.size(); i++) {
+	            MItem item = new MItem(i, items.get(i));
+	            item.save();
+	        }
+	        ActiveAndroid.setTransactionSuccessful();
+    	}
+    	finally {
+	        ActiveAndroid.endTransaction();
     	}
     }
 
