@@ -17,5 +17,8 @@
     
     <!-- EditItemDialog -->
     <string name="edit_dialog">Edit Item</string>
+    
+      <!-- AddItemDialog -->
+    <string name="add_dialog">Add Item</string>
        
 </resources>

@@ -10,6 +10,7 @@ Extensions:
 
     - Use a DialogFragment instead of new Activity for editing items
     - Persist the todo app in SQLite instead of using a text file
+    - Add support for completion due dates for items
 
 Walkthrough for the feature:
 
@@ -20,5 +21,9 @@ Original
 With DialogFragment
 
 ![Video Walkthrough](simpletodolist_dialogfragment.gif)
+
+With DueDate
+
+![Video Walkthrough](simpletodolist_duedate.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).

@@ -10,27 +10,16 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-public class EditItemDialog extends DialogFragment {
-
+public class AddItemDialog extends DialogFragment {
 	private EditText mEditText;
 	private DatePicker mDueDate;
 
-	public EditItemDialog() {
+	public AddItemDialog() {
 		// Empty constructor required for DialogFragment
 	}
 
-	public static EditItemDialog newInstance(Item item) {
-		EditItemDialog frag = new EditItemDialog();
-		Bundle args = new Bundle();
-		args.putInt("position", item.getPosition());
-		args.putString("text", item.getText());
-		args.putString("dueDate", item.getDueDate());
-		frag.setArguments(args);
-		return frag;
-	}
-
-	public interface EditItemDialogListener {
-		public void onEditItemClick(Item item);
+	public interface AddItemDialogListener {
+		public void onAddItemClick(Item item);
 	}
 
 	@Override
@@ -38,32 +27,23 @@ public class EditItemDialog extends DialogFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 
-		builder.setTitle(R.string.edit_dialog);
+		builder.setTitle(R.string.add_dialog);
 		View view = inflater.inflate(R.layout.item_dialog, null, false);
 		mEditText = (EditText) view.findViewById(R.id.etAddItemText);
-		mEditText.setText(getArguments().getString("text"));
 		mEditText.requestFocus();
-		// Parse dueDate(mm/dd/yyyy) to get month day and year
-		String date[] = getArguments().getString("dueDate").split("/");
-		int month = Integer.parseInt(date[0]);
-		int day = Integer.parseInt(date[1]);
-		int year = Integer.parseInt(date[2]);
 		mDueDate = (DatePicker) view.findViewById(R.id.dpDueDate);
-		mDueDate.updateDate(year, month, day);
-
 		builder.setView(view)
 				.setPositiveButton(android.R.string.ok,
 						new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(
 									DialogInterface dialogInterface, int i) {
-								EditItemDialogListener listener = (EditItemDialogListener) getActivity();
+								AddItemDialogListener listener = (AddItemDialogListener) getActivity();
 								String date = mDueDate.getMonth() + "/"
 										+ mDueDate.getDayOfMonth() + "/"
 										+ mDueDate.getYear();
-								listener.onEditItemClick(new Item(
-										getArguments().getInt("position"),
-										mEditText.getText().toString(), date));
+								listener.onAddItemClick(new Item(0, mEditText
+										.getText().toString(), date));
 							}
 						})
 				.setNegativeButton(android.R.string.cancel,

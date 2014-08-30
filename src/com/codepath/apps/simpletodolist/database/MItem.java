@@ -11,34 +11,33 @@ import com.activeandroid.query.Select;
 public class MItem extends Model {
 	@Column(name = "Position", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
 	public int position;
-	
+
 	@Column(name = "Text")
 	public String text;
-	
-	public MItem(){
+
+	@Column(name = "DueDate")
+	public String dueDate;
+
+	public MItem() {
 		super();
 	}
-	
-	public MItem(int position, String text){
+
+	public MItem(int position, String text, String dueDate) {
 		super();
 		this.position = position;
 		this.text = text;
+		this.dueDate = dueDate;
 	}
-	
-	//Get single item based on the position
+
+	// Get single item based on the position
 	public static MItem getItem(int position) {
-        return new Select()
-	      .from(MItem.class)
-	      .where("Position = ?", position)
-	      .executeSingle();
+		return new Select().from(MItem.class).where("Position = ?", position)
+				.executeSingle();
 	}
-	
-	//Get all items. 
+
+	// Get all items.
 	public static List<MItem> getAll() {
-		return new Select()
-		  .from(MItem.class)
-          .orderBy("Position ASC")
-          .execute();
-	 }
-	
+		return new Select().from(MItem.class).orderBy("Position ASC").execute();
+	}
+
 }
