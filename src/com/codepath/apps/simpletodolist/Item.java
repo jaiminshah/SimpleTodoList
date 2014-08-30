@@ -10,6 +10,7 @@ public class Item {
 	}
 
 	public Item(int position, String text, String dueDate) {
+		this.position = position;
 		this.text = text;
 		this.dueDate = dueDate;
 	}
