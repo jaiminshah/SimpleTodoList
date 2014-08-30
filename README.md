@@ -7,8 +7,9 @@ App features:
     * Edit an item by clicking on it. 
 
 Extensions:
-	* [x] Use a DialogFragment instead of new Activity for editing items
-	* [x] Persist the todo app in SQLite instead of using a text file
+
+    * [x] Use a DialogFragment instead of new Activity for editing items
+    * [x] Persist the todo app in SQLite instead of using a text file
 
 Walkthrough for the feature:
 
